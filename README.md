@@ -6,124 +6,111 @@
 Membarr 
 =================
 
-Membarr is a fork of Invitarr that invites discord users to Plex and Jellyfin. You can also automate this bot to invite discord users to a media server once a certain role is given to a user or the user can also be added manually.  
+Membarr — это форк Invitarr, который приглашает пользователей Discord в Plex и Jellyfin. Вы также можете автоматизировать этого бота, чтобы он приглашал пользователей Discord на медиасервер, как только пользователю будет присвоена определенная роль, или же пользователя можно добавить вручную.
 
 ### Features
 
-- Ability to invite users to Plex and Jellyfin from discord 
-- Fully automatic invites using roles 
-- Ability to kick users from plex if they leave the discord server or if their role is taken away.
-- Ability to view the database in discord and to edit it.
-
-Commands: 
+- Возможность приглашать пользователей в Plex и Jellyfin из дискорда.
+- Полностью автоматические приглашения с использованием ролей
+- Возможность выкидывать пользователей из plex, если они покидают сервер Discord или если их роль отбирают.
+- Возможность просмотра базы данных в Discord и ее редактирования.Commands: 
 
 ```
 /plex invite <email>
-This command is used to add an email to plex
+Эта команда используется для добавления электронной почты в plex
 /plex remove <email>
-This command is used to remove an email from plex
+Эта команда используется для удаления почты из plex
 /jellyfin invite <jellyfin username>
-This command is used to add a user to Jellyfin.
+Эта команда используется для добавления пользователя в Jellyfin.
 /jellyfin remove <jellyfin username>
-This command is used to remove a user from Jellyfin.
+Эта команда используется для удаления пользователя из Jellyfin.
 /membarr dbls
-This command is used to list Membarr's database
+Эта команда используется для получения списка базы данных Membarr
 /membarr dbadd <@user> <optional: plex email> <optional: jellyfin username>
-This command is used to add exsisting  plex emails, jellyfin users and discord id to the DB.
+Эта команда используется для добавления в БД существующих plex email'ов, jellyfin пользователей и discord id.
 /membarr dbrm <position>
-This command is used to remove a record from the Db. Use /membarr dbls to determine record position. ex: /membarr dbrm 1
+Эта команда используется для удаления записи из базы данных. Для определения позиции записи используйте /membarr dbls. пример: /membarr dbrm 1
 ```
-# Creating Discord Bot
-1. Create the discord server that your users will get member roles or use an existing discord that you can assign roles from
-2. Log into https://discord.com/developers/applications and click 'New Application'
-3. (Optional) Add a short description and an icon for the bot. Save changes.
-4. Go to 'Bot' section in the side menu
-5. Uncheck 'Public Bot' under Authorization Flow
-6. Check all 3 boxes under Privileged Gateway Intents: Presence Intent, Server Members Intent, Message Content Intent. Save changes.
-7. Copy the token under the username or reset it to copy. This is the token used in the docker image.
-8. Go to 'OAuth2' section in the side menu, then 'URL Generator'
-9. Under Scopes, check 'bot' and applications.commands
-10. Copy the 'Generated URL' and paste into your browser and add it to your discord server from Step 1.
-11. The bot will come online after the docker container is running with the correct Bot Token
+# Создание Discord-бота
+1. Создайте дискорд-сервер, на котором пользователи будут получать роли участников, или используйте существующий сервер, в котором можно назначать роли
+2. Авторизуйтесь на https://discord.com/developers/applications и нажмите 'New Application'
+3. (Дополнительно) Добавьте краткое описание и иконку для бота. Сохраните изменения.
+4. Перейдите в раздел 'Бот' в боковом меню
+5. Снимите флажок 'Public Bot' в разделе Authorization Flow
+6. Установите все три флажка в разделе Privileged Gateway Intents: Presence Intent, Server Members Intent, Message Content Intent. Сохранить изменения.
+7. Скопируйте токен под именем пользователя или сбросьте его для копирования. Это токен, используемый в образе докера.
+8. Перейдите в раздел 'OAuth2' в боковом меню, затем 'URL Generator'
+9. В разделе Scopes отметьте 'bot' и applications.commands
+10. Скопируйте 'Generated URL', вставьте его в свой браузер и добавьте его на свой сервер Discord, из шага 1.
+11. Бот подключится к сети после запуска Docker-контейнера с правильным токеном бота.
 
+# Ручная настройка (для Docker см. ниже)
 
-# Unraid Installation
-> For Manual an Docker setup, see below
+**1. Введите токен бота Discord в bot.env**
 
-1. Ensure you have the Community Applications plugin installed.
-2. Inside the Community Applications app store, search for Membarr.
-3. Click the Install Button.
-4. Add discord bot token.
-5. Click apply
-6. Finish setting up using [Setup Commands](#after-bot-has-started)
-
-# Manual Setup (For Docker, see below)
-
-**1. Enter discord bot token in bot.env**
-
-**2. Install requirements**
+**2. Требования к установке**
 
 ```
 pip3 install -r requirements.txt 
 ```
-**3. Start the bot**
+**3. Запустить бота**
 ```
 python3 Run.py
 ```
 
-# Docker Setup & Start
-To run Membarr in Docker, run the following command, replacing [path to config] with the absolute path to your bot config folder:
+# Настройка и запуск Docker
+Чтобы запустить Membarr в Docker, выполните следующую команду, заменив [path to config] абсолютным путем к папке конфигурации вашего бота:
 ```
 docker run -d --restart unless-stopped --name membarr -v /[path to config]:/app/app/config -e "token=YOUR_DISCORD_TOKEN_HERE" yoruio/membarr:latest
 ```
 
-# After bot has started 
+# После запуска бота
 
-# Plex Setup Commands: 
+# Команды настройки Plex: 
 
 ```
 /plexsettings setup <username> <password> <server name>
-This command is used to setup plex login. 
+Эта команда используется для настройки входа в plex.
 /plexsettings addrole <@role>
-These role(s) will be used as the role(s) to automatically invite user to plex
+Эти роли будут использоваться в качестве ролей для автоматического приглашения пользователя в plex.
 /plexsettings removerole <@role>
-This command is used to remove a role that is being used to automatically invite uses to plex
+Эта команда используется для удаления роли, которая используется для автоматического приглашения пользователей в plex.
 /plexsettings setuplibs <libraries>
-This command is used to setup plex libraries. Default is set to all. Libraries is a comma separated list.
+Эта команда используется для настройки библиотек plex. По умолчанию выбраны все. Библиотеки — это список, разделенный запятыми.
 /plexsettings enable
-This command enables the Plex integration (currently only enables auto-add / auto-remove)
+Эта команда включает интеграцию Plex (в настоящее время включает только автоматическое добавление/автоудаление)
 /plexsettings disable
-This command disables the Plex integration (currently only disables auto-add / auto-remove)
+Эта команда отключает интеграцию Plex (в настоящее время отключает только автоматическое добавление/автоудаление).
 ```
 
-# Jellyfin Setup Commands:
+# Команды настройки Jellyfin:
 ```
 /jellyfinsettings setup <server url> <api key> <optional: external server url (default: server url)>
-This command is used to setup the Jellyfin server. The external server URL is the URL that is sent to users to log into your Jellyfin server.
+Эта команда используется для настройки сервера Jellyfin. URL-адрес внешнего сервера — это URL-адрес, который отправляется пользователям для входа на ваш сервер Jellyfin.
 /jellyfinsettings addrole <@role>
-These role(s) will be used as the role(s) to automatically invite user to Jellyfin
+Эти роли будут использоваться в качестве ролей для автоматического приглашения пользователя в Jellyfin.
 /jellyfinsettings removerole <@role>
-This command is used to remove a role that is being used to automatically invite uses to Jellyfin
+Эта команда используется для удаления роли, которая используется для автоматического приглашения пользователей в Jellyfin.
 /jellyfinsettings setuplibs <libraries>
-This command is used to setup Jellyfin libraries. Default is set to all. Libraries is a comma separated list.
+Эта команда используется для настройки библиотек Jellyfin. По умолчанию выбраны все. Библиотеки — это список, разделенный запятыми.
 /jellyfinsettings enable
-This command enables the Jellyfin integration (currently only enables auto-add / auto-remove)
+Эта команда включает интеграцию Jellyfin (в настоящее время включает только автоматическое добавление/автоудаление)
 /jellyfinsettings disable
-This command disables the Jellyfin integration (currently only disables auto-add / auto-remove)
+Эта команда отключает интеграцию Jellyfin (в настоящее время отключает только автоматическое добавление/автоудаление)
 ```
 
-# Migration from Invitarr
-Invitarr does not require the applications.commands scope, so you will need to kick and reinvite your Discord bot to your server, making sure to tick both the "bot" and "applications.commands" scopes in the Oauth URL generator.
+# Миграция с Invitarr
+Для Invitarr не требуется область application.commands, поэтому вам нужно будет выгнать и повторно пригласить бота Discord на свой сервер, обязательно отметив обе области "bot" и "applications.commands" в генераторе URL-адресов Oauth.
 
-Membarr uses a slightly different database table than Invitarr. Membarr will automatically update the Invitarr db table to the current Membarr table format, but the new table will no longer be compatible with Invitarr, so backup your app.db before running Membarr!
+Membarr использует немного другую таблицу базы данных, чем Invitarr. Membarr автоматически обновит таблицу базы данных Invitarr до текущего формата таблицы Membarr, но новая таблица больше не будет совместима с Invitarr, поэтому сделайте резервную копию файла app.db перед запуском Membarr!
 
-# Migration to Invitarr
-As mentioned in [Migration from Invitarr](#Migration-From-Invitarr), Membarr has a slightly different db table than Invitarr. To Switch back to Invitarr, you will have to manually change the table format back. Open app.db in a sqlite cli tool or browser like DB Browser, then remove the "jellyfin_username" column, and make the "email" column non-nullable.
+# Миграция на Invitarr
+Как упоминалось в [Миграция с Invitarr](#Migration-From-Invitarr), у Membarr немного другая таблица базы данных, чем у Invitarr. Чтобы вернуться к Invitarr, вам придется вручную изменить формат таблицы обратно. Откройте app.db в инструменте sqlite cli или в браузере, таком как DB Browser, затем удалите столбец «jellyfin_username» и сделайте столбец «email» ненулевым.
 
-# Contributing
-We appreciate any and all contributions made to the project, whether that be new features, bugfixes, or even fixed typos! If you would like to contribute to the project, simply fork the development branch, make your changes, and open a pull request. *Pull requests that are not based on the development branch will be rejected.*
+# Содействие
+Мы ценим любой вклад, внесенный в проект, будь то новые функции, исправления ошибок или даже исправления опечаток! Если вы хотите внести свой вклад в проект, просто создайте ветку разработки, внесите изменения и откройте запрос на включение. *Запросы на включение, не относящиеся к ветке разработки, будут отклонены.*
 
-# Other stuff
-**Enable Intents else bot will not Dm users after they get the role.**
+# Прочее
+**Включите Intents, в противном случае бот не будет добавлять пользователей в Dm после получения ими роли.**
 https://discordpy.readthedocs.io/en/latest/intents.html#privileged-intents
-**Discord Bot requires Bot and application.commands permission to fully function.**
+**Для полноценной работы Discord Bot требуется разрешение Bot и application.commands.**
