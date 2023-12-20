@@ -1,7 +1,7 @@
-Membarr 
+MembarrRU 
 =================
 
-Membarr — это форк Invitarr, который приглашает пользователей Discord в Plex и Jellyfin. Вы также можете автоматизировать этого бота, чтобы он приглашал пользователей Discord на медиасервер, как только пользователю будет присвоена определенная роль, или же пользователя можно добавить вручную.
+MembarrRU — это форк Membarr, который форк Invitarr, который приглашает пользователей Discord в Plex и Jellyfin. Вы также можете автоматизировать этого бота, чтобы он приглашал пользователей Discord на медиасервер, как только пользователю будет присвоена определенная роль, или же пользователя можно добавить вручную.
 
 ### Features
 
@@ -56,7 +56,7 @@ python3 Run.py
 # Настройка и запуск Docker
 Чтобы запустить Membarr в Docker, выполните следующую команду, заменив [path to config] абсолютным путем к папке конфигурации вашего бота:
 ```
-docker run -d --restart unless-stopped --name membarr -v /[path to config]:/app/app/config -e "token=YOUR_DISCORD_TOKEN_HERE" yoruio/membarr:latest
+docker run -d --restart unless-stopped --name membarrru -v /[path to config]:/app/app/config -e "token=YOUR_DISCORD_TOKEN_HERE" deadcxap/membarrru:latest
 ```
 
 # После запуска бота
