@@ -50,17 +50,17 @@ def save_user_email(username, email):
             VALUES('{username}', '{email}')
         """)
         conn.commit()
-        print("User added to db.")
+        print("Пользователь добавлен в базу.")
     else:
-        return "Username and email cannot be empty"
+        return "Имя пользователя и адрес электронной почты не могут быть пустыми."
 
 def save_user(username):
     if username:
         conn.execute("INSERT INTO clients (discord_username) VALUES ('"+ username +"')")
         conn.commit()
-        print("User added to db.")
+        print("Пользователь добавлен в БД.")
     else:
-        return "Username cannot be empty"
+        return "Имя пользователя не может быть пустым"
     
 def save_user_jellyfin(username, jellyfin_username):
     if username and jellyfin_username:
@@ -69,9 +69,9 @@ def save_user_jellyfin(username, jellyfin_username):
             VALUES('{username}', '{jellyfin_username}')
         """)
         conn.commit()
-        print("User added to db.")
+        print("Пользователь добавлен в БД.")
     else:
-        return "Discord and Jellyfin usernames cannot be empty"
+        return "Имена пользователей Discord и Jellyfin не могут быть пустыми."
 
 def save_user_all(username, email, jellyfin_username):
     if username and email and jellyfin_username:
@@ -80,7 +80,7 @@ def save_user_all(username, email, jellyfin_username):
             VALUES('{username}', '{email}', '{jellyfin_username}')
         """)
         conn.commit()
-        print("User added to db.")
+        print("Пользователь добавлен в БД.")
     elif username and email:
         save_user_email(username, email)
     elif username and jellyfin_username:
@@ -88,7 +88,7 @@ def save_user_all(username, email, jellyfin_username):
     elif username:
         save_user(username)
     else:
-        return "Discord username must all be provided"
+        return "Необходимо указать имя пользователя Discord."
 
 def get_useremail(username):
     if username:
@@ -99,11 +99,11 @@ def get_useremail(username):
             if email:
                 return email
             else:
-                return "No email found"
+                return "Электронная почта не найдена"
         except:
-            return "error in fetching from db"
+            return "ошибка при извлечении из БД"
     else:
-        return "username cannot be empty"
+        return "имя пользователя не может быть пустым"
 
 def get_jellyfin_username(username):
     """
@@ -121,11 +121,11 @@ def get_jellyfin_username(username):
             if jellyfin_username:
                 return jellyfin_username
             else:
-                return "No users found"
+                return "Пользователи не найдены"
         except:
-            return "error in fetching from db"
+            return "ошибка при извлечении из БД"
     else:
-        return "username cannot be empty"
+        return "имя пользователя не может быть пустым"
 
 def remove_email(username):
     """
@@ -134,10 +134,10 @@ def remove_email(username):
     if username:
         conn.execute(f"UPDATE clients SET email = null WHERE discord_username = '{username}'")
         conn.commit()
-        print(f"Email removed from user {username} in database")
+        print(f"Адрес электронной почты удален от пользователя {username} в базе данных.")
         return True
     else:
-        print(f"Username cannot be empty.")
+        print(f"Имя пользователя не может быть пустым.")
         return False
 
 def remove_jellyfin(username):
@@ -147,10 +147,10 @@ def remove_jellyfin(username):
     if username:
         conn.execute(f"UPDATE clients SET jellyfin_username = null WHERE discord_username = '{username}'")
         conn.commit()
-        print(f"Jellyfin username removed from user {username} in database")
+        print(f"Имя пользователя Jellyfin удалено из пользователя {username} в базе данных.")
         return True
     else:
-        print(f"Username cannot be empty.")
+        print(f"Имя пользователя не может быть пустым.")
         return False
 
 
@@ -163,7 +163,7 @@ def delete_user(username):
         except:
             return False
     else:
-        return "username cannot be empty"
+        return "Имя пользователя не может быть пустым"
 
 def read_all():
     cur = conn.cursor()

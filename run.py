@@ -37,7 +37,7 @@ class Bot(commands.Bot):
             await self.tree.sync(guild=guild)
 
     async def on_guild_join(self, guild):
-        print(f"Вступил в гильдию {guild.name}")
+        print(f"Зашёл на сервер {guild.name}")
         print(f"Синхронизация команд с {guild.name}")
         self.tree.copy_global_to(guild=guild)
         await self.tree.sync(guild=guild)
