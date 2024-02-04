@@ -110,6 +110,13 @@ except:
     JELLYFIN_EXTERNAL_URL = JELLYFIN_SERVER_URL
     print("Не удалось получить внешний URL-адрес Jellyfin. По умолчанию используется URL-адрес сервера.")
 
+try:
+    DISCORD_SERVER_PERM = config.get(BOT_SECTION, "discord_perm")
+except:
+    DISCORD_SERVER_PERM = None
+    print("Не удалось получить id роли для управления ботом. Возможна любая дичь.")
+
+
 if USE_PLEX and plex_configured:
     try:
         print("Подключение к Plex......")
@@ -363,29 +370,29 @@ class app(commands.Cog):
         if deleted:
             print("Удален {} из базы данных, поскольку пользователь покинул сервер Discord.".format(email))
 
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @plex_commands.command(name="invite", description="Пригласить пользователя в Plex")
     async def plexinvite(self, interaction: discord.Interaction, email: str):
         await self.addtoplex(email, interaction.response)
     
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @plex_commands.command(name="remove", description="Удаление пользователя из Plex")
     async def plexremove(self, interaction: discord.Interaction, email: str):
         await self.removefromplex(email, interaction.response)
     
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @jellyfin_commands.command(name="invite", description="Пригласить пользователя в Jellyfin")
     async def jellyfininvite(self, interaction: discord.Interaction, username: str):
         password = jelly.generate_password(16)
         if await self.addtojellyfin(username, password, interaction.response):
             await embedcustom(interaction.response, "Пользователь Jellyfin создан!", {'Username': username, 'Password': f"||{password}||"})
 
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @jellyfin_commands.command(name="remove", description="Удаление пользователя из Jellyfin")
     async def jellyfinremove(self, interaction: discord.Interaction, username: str):
         await self.removefromjellyfin(username, interaction.response)
     
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @membarr_commands.command(name="dbadd", description="Добавьте пользователя в базу данных Membarr")
     async def dbadd(self, interaction: discord.Interaction, member: discord.Member, email: str = "", jellyfin_username: str = ""):
         email = email.strip()
@@ -403,7 +410,7 @@ class app(commands.Cog):
             await embedinfo(interaction.response, 'Произошла ошибка при добавлении этого пользователя в базу данных. Проверьте журналы Membarr для получения дополнительной информации.')
             print(e)
 
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @membarr_commands.command(name="dbls", description="Посмотреть базу данных Memarr")
     async def dbls(self, interaction: discord.Interaction):
 
@@ -437,7 +444,7 @@ class app(commands.Cog):
             await interaction.response.send_message(embed = embed, ephemeral=True)
         
             
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.checks.has_role(DISCORD_SERVER_PERM)
     @membarr_commands.command(name="dbrm", description="Удалить пользователя из базы данных Membarr")
     async def dbrm(self, interaction: discord.Interaction, position: int):
         embed = discord.Embed(title='База данных Memarr.')

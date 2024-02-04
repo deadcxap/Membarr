@@ -74,7 +74,7 @@ jellyfin_commands = app_commands.Group(name="jellyfinsettings", description="Mem
 
 
 @plex_commands.command(name="addrole", description="Роль для автоматического создания пользователя в Plex")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def plexroleadd(interaction: discord.Interaction, role: discord.Role):
     if len(plex_roles) <= maxroles:
         # Do not add roles multiple times.
@@ -92,7 +92,7 @@ async def plexroleadd(interaction: discord.Interaction, role: discord.Role):
 
 
 @plex_commands.command(name="removerole", description="Прекратить создавать пользователй Plex с помощью ролей.")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def plexroleremove(interaction: discord.Interaction, role: discord.Role):
     if role.name not in plex_roles:
         await embederror(interaction.response, f"\"{role.name}\" больше не связана с Plex.")
@@ -103,7 +103,7 @@ async def plexroleremove(interaction: discord.Interaction, role: discord.Role):
 
 
 @plex_commands.command(name="listroles", description="Список всех ролей, участники которых будут автоматически добавлены в Plex.")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def plexrolels(interaction: discord.Interaction):
     await interaction.response.send_message(
         "Следующие роли автоматически добавляются в Plex:\n" +
@@ -112,7 +112,7 @@ async def plexrolels(interaction: discord.Interaction):
 
 
 @plex_commands.command(name="setup", description="Настройка интеграции с Plex")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def setupplex(interaction: discord.Interaction, username: str, password: str, server_name: str,
                     base_url: str = "", save_token: bool = True):
     await interaction.response.defer()
@@ -157,7 +157,7 @@ async def setupplex(interaction: discord.Interaction, username: str, password: s
 
 
 @jellyfin_commands.command(name="addrole", description="Добавление роли для автоматического добавления пользователей в Jellyfin")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def jellyroleadd(interaction: discord.Interaction, role: discord.Role):
     if len(jellyfin_roles) <= maxroles:
         # Do not add roles multiple times.
@@ -176,7 +176,7 @@ async def jellyroleadd(interaction: discord.Interaction, role: discord.Role):
 
 
 @jellyfin_commands.command(name="removerole", description="Прекращение добавления пользователей с ролью в Jellyfin")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def jellyroleremove(interaction: discord.Interaction, role: discord.Role):
     if role.name not in jellyfin_roles:
         await embederror(interaction.response, f"\"{role.name}\" больше не связана с Jellyfin.")
@@ -189,7 +189,7 @@ async def jellyroleremove(interaction: discord.Interaction, role: discord.Role):
 
 @jellyfin_commands.command(name="listroles",
                            description="Список всех ролей, участники которых будут автоматически добавлены в Jellyfin.")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def jellyrolels(interaction: discord.Interaction):
     await interaction.response.send_message(
         "Следующие роли автоматически добавляются в Jellyfin:\n" +
@@ -198,7 +198,7 @@ async def jellyrolels(interaction: discord.Interaction):
 
 
 @jellyfin_commands.command(name="setup", description="Настройка интеграции Jellyfin")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def setupjelly(interaction: discord.Interaction, server_url: str, api_key: str, external_url: str = None):
     await interaction.response.defer()
     # get rid of training slashes
@@ -247,7 +247,7 @@ async def setupjelly(interaction: discord.Interaction, server_url: str, api_key:
 
 
 @plex_commands.command(name="setuplibs", description="Библиотеки настройки, к которым могут получить доступ новые пользователи")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def setupplexlibs(interaction: discord.Interaction, libraries: str):
     if not libraries:
         await embederror(interaction.response, "строка библиотек пуста.")
@@ -264,7 +264,7 @@ async def setupplexlibs(interaction: discord.Interaction, libraries: str):
 
 
 @jellyfin_commands.command(name="setuplibs", description="Настройка библиотек, к которым могут получить доступ новые пользователи")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def setupjellylibs(interaction: discord.Interaction, libraries: str):
     if not libraries:
         await embederror(interaction.response, "строка библиотек пуста.")
@@ -282,7 +282,7 @@ async def setupjellylibs(interaction: discord.Interaction, libraries: str):
 
 # Enable / Disable Plex integration
 @plex_commands.command(name="enable", description="Включение автоматического добавления пользователей в Plex")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def enableplex(interaction: discord.Interaction):
     if confighelper.USE_PLEX:
         await interaction.response.send_message("Plex уже включен.", ephemeral=True)
@@ -296,7 +296,7 @@ async def enableplex(interaction: discord.Interaction):
 
 
 @plex_commands.command(name="disable", description="Отключение добавления пользователей в Plex")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def disableplex(interaction: discord.Interaction):
     if not confighelper.USE_PLEX:
         await interaction.response.send_message("Plex уже отключен.", ephemeral=True)
@@ -311,7 +311,7 @@ async def disableplex(interaction: discord.Interaction):
 
 # Enable / Disable Jellyfin integration
 @jellyfin_commands.command(name="enable", description="Включение добавления пользователей в Jellyfin")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def enablejellyfin(interaction: discord.Interaction):
     if confighelper.USE_JELLYFIN:
         await interaction.response.send_message("Jellyfin уже включен.", ephemeral=True)
@@ -326,7 +326,7 @@ async def enablejellyfin(interaction: discord.Interaction):
 
 
 @jellyfin_commands.command(name="disable", description="Отключение добавления пользователей в Jellyfin")
-@app_commands.checks.has_permissions(administrator=True)
+@app_commands.checks.has_role(DISCORD_SERVER_PERM)
 async def disablejellyfin(interaction: discord.Interaction):
     if not confighelper.USE_JELLYFIN:
         await interaction.response.send_message("Jellyfin уже отключен.", ephemeral=True)

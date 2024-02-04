@@ -12,7 +12,7 @@ config = configparser.ConfigParser()
 CONFIG_KEYS = ['username', 'password', 'discord_bot_token', 'plex_user', 'plex_pass', 'plex_token',
                 'plex_base_url', 'plex_roles', 'plex_server_name', 'plex_libs', 'owner_id', 'channel_id',
                 'auto_remove_user', 'jellyfin_api_key', 'jellyfin_server_url', 'jellyfin_roles',
-                'jellyfin_libs', 'plex_enabled', 'jellyfin_enabled', 'jellyfin_external_url']
+                'jellyfin_libs', 'plex_enabled', 'jellyfin_enabled', 'jellyfin_external_url', 'discord_perm']
 
 # settings
 Discord_bot_token = ""
@@ -29,6 +29,7 @@ jellyfin_libs = ""
 jellyfin_roles = None
 plex_configured = True
 jellyfin_configured = True
+DISCORD_SERVER_PERM = ""
 
 switch = 0 
 
@@ -152,6 +153,12 @@ try:
 except:
     print("Не удалось получить конфигурацию включения Plex. По умолчанию установлено значение False")
     USE_PLEX = False
+
+try:
+    DISCORD_SERVER_PERM = config.get(BOT_SECTION, "discord_perm")
+except:
+    DISCORD_SERVER_PERM = None
+    print("Не удалось получить id роли для управления ботом. Возможна любая дичь.")
 
 def get_config():
     """
